@@ -1,6 +1,6 @@
 ---
 title: "Problem Set 08"
-author: "Your Name"
+author: "Chris Hall"
 date: last-modified
 date-format: "[Last modified on] MMMM DD, YYYY HH:mm:ss zzz"
 format: 
