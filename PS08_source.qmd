@@ -99,7 +99,7 @@ How many rows does `boot_samp_1000` have? **Why?**
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
-* Delete this and put your text answer here.
+* The bootstrap has 100,00 rows because out reps are at 1,000 with size of 100 so 1,000 * 100 = 100,000 **(Total rows = reps X size)**.
 :::
 
 ## Step 2: Calculate the Bootstrap Statistic
@@ -174,7 +174,7 @@ How many values of the bootstrap statistic `stat` are there in the object `boot_
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 2 Answers"}
-* Delete this and put your text answer here.
+* There are 1,000 values of the bootstrap statistic `stat. Since there are 1,000 re samples then we will have exactly 1,000 values of the mean of each bootstrap.
 :::
 
 ## Visualizing the Bootstrap Distribution
@@ -335,11 +335,16 @@ boot_dist_tv_infer |> visualize() +
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 3 Answers"}
-* Delete this and put your text answer here.
+* 900 values out of the 1,000 values of `tv_mean` would fall between the `lower_ci` and `upper_ci` **(1,000 * 0.90 = 900)**.
 
 ```{r}
 # Type your code and comments below
+ci_90 <- boot_dist_tv_infer %>%
+  get_confidence_interval(level = 0.90, type = "percentile")
 
+boot_dist_tv_infer %>%
+  filter(stat >= ci_90$lower_ci & stat <= ci_90$upper_ci) %>%
+  nrow()
 ```
 :::
 
@@ -350,10 +355,13 @@ Use the bootstrap resampling distribution for `tvhours` generated using the infe
 ::: {.callout-important icon="false" collapse="false" title="Problem 4 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+ci_99 <- boot_dist_tv_infer %>%
+  get_confidence_interval(level = 0.99, type = "percentile")
 
+ci_99
 ```
 
-* Delete this and put your text answer here.
+* We are 99% confident that the true population mean of tv hours watched per day is between `r round(ci_99$lower_ci, 2)` hours and `r round(ci_99$upper_ci, 2)` hours.
 :::
 
 ::: {.callout-note icon="false" title="Problem 5"}
@@ -361,7 +369,7 @@ Which confidence interval is **WIDER**: the 95% confidence interval or the 99% c
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 5 Answers"}
-* Delete this and put your text answer here.
+* The 99% cofiendce interval is wider than the 95% confidence interval. The reason is to have a higher degree of certainty that the interval capture the true population mean, you must include a larger portion of the bootstrap distribution which requires extending the boundaries futher into the outer tails.
 :::
 
 ::: {.callout-note icon="false" title="Problem 6"}
@@ -373,7 +381,16 @@ Which confidence interval is **WIDER**: the 95% confidence interval or the 99% c
 ::: {.callout-important icon="false" collapse="false" title="Problem 6 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+set.seed(21) 
+boot_dist_age1 <- boot_samp_1000 %>%
+  group_by(replicate) %>%
+  summarize(stat = mean(age, na.rm = TRUE))
 
+set.seed(21) 
+boot_dist_age2 <- gss_sample %>%
+  specify(response = age) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
 ```
 :::
 
@@ -384,12 +401,23 @@ Calculate 95% confidence intervals for the population mean respondent `age` $\mu
 ::: {.callout-important icon="false" collapse="false" title="Problem 7 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+sample_mean_age <- gss_sample %>%
+  summarize(mean_age = mean(age, na.rm = TRUE)) %>%
+  pull(mean_age)
 
+ci_age1_se <- boot_dist_age1 %>%
+  get_confidence_interval(type = "se", point_estimate = sample_mean_age)
+
+ci_age2_se <- boot_dist_age2 %>%
+  get_confidence_interval(type = "se", point_estimate = sample_mean_age)
+
+ci_age1_se
+ci_age2_se
 ```
 
-* Delete this and put your text answer here.
+* For `boot_dist_age1` my lower bound confidence interavl is `r round(ci_age1_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age1_se$upper_ci, 1)`.
 
-* Delete this and put your text answer here.
+* For `boot_dist_age2` my lower bound confidence interavl is `r round(ci_age2_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age2_se$upper_ci, 1)`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 8"}
