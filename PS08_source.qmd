@@ -415,9 +415,9 @@ ci_age1_se
 ci_age2_se
 ```
 
-* For `boot_dist_age1` my lower bound confidence interavl is `r round(ci_age1_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age1_se$upper_ci, 1)`.
+* For `boot_dist_age1` my lower bound confidence interval is `r round(ci_age1_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age1_se$upper_ci, 1)`.
 
-* For `boot_dist_age2` my lower bound confidence interavl is `r round(ci_age2_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age2_se$upper_ci, 1)`.
+* For `boot_dist_age2` my lower bound confidence interval is `r round(ci_age2_se$lower_ci, 1)` and my upper bound confidence interval is `r round(ci_age2_se$upper_ci, 1)`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 8"}
@@ -427,10 +427,12 @@ Calculate a 95% bootstrap percentile confidence interval for the population mean
 ::: {.callout-important icon="false" collapse="false" title="Problem 8 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+ci_age1_percentile <- boot_dist_age1 %>%
+  get_confidence_interval(type = "percentile", level = 0.95)
+ci_age1_percentile
 ```
 
-* Delete this and put your text answer here.
+* For `boot_dist_age1` my 95% confidence interval has a lower bound value of `r round(ci_age1_percentile$lower_ci, 2)` and a upper bound value of `r round(ci_age1_percentile$upper_ci, 2)`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 9"}
@@ -438,7 +440,7 @@ How do the 95% confidence intervals you calculated in 7 and 8 compare? i.e. are 
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 9 Answers"}
-* Delete this and put your text answer here.
+* The 95% confidence intervals calculated in Problem 7(using standard error method) and Problem 8(using the percentile method) are very similar.
 :::
 
 ::: {.callout-note icon="false" title="Problem 10"}
@@ -448,10 +450,13 @@ Use the **bootstrap resampling distribution** for the sample mean respondent `ag
 ::: {.callout-important icon="false" collapse="false" title="Problem 10 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+ci_age1_80 <- boot_dist_age1 %>%
+  get_confidence_interval(type = "percentile", level = 0.80)
 
+ci_age1_80
 ```
 
-* Delete this and put your text answer here.
+* For `boot_dist_age1` my 80% confidence interval has a lower bound value of `r round(ci_age1_80$lower_ci, 1)` and a upper bound value of `r round(ci_age1_80$upper_ci, 1)`.
 :::
 
 # Bootstrap Sampling Distribution & Confidence Intervals with Categorical Variables
@@ -546,20 +551,33 @@ Calculate a 95% CI for the **population proportion** of respondents $p$ who iden
 ::: {.callout-important icon="false" collapse="false" title="Problem 11 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+set.seed(43)
+boot_dist_white_infer <- gss_sample %>%
+  specify(response = race, success = "White") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop")
 ```
 
 ```{r}
 # Type your code and comments inside the code chunk
 # percentile method
-
+ci_white_percentile_infer <- boot_dist_white_infer %>%
+  get_confidence_interval(level = 0.95, type = "percentile")
+ci_white_percentile_infer
 # 95% rule
+observed_prop_infer <- gss_sample %>%
+  specify(response = race, success = "White") %>%
+  calculate(stat = "prop")
 
+ci_white_se_infer <- boot_dist_white_infer %>%
+  get_confidence_interval(level = 0.95, type = "se", point_estimate = observed_prop_infer)
+
+ci_white_se_infer
 ```
 
-* Delete this and put your text answer here.
+* For the percentile method, my lower bound confidence interval is `r round(ci_white_percentile_infer$lower_ci, 3)` and my upper bound confidence interval is `r round(ci_white_percentile_infer$upper_ci, 3)`.
 
-* Delete this and put your text answer here.
+* For the percentile method, my lower bound confidence interval is `r round(ci_white_se_infer$lower_ci, 3)` and my upper bound confidence interval is `r round(ci_white_se_infer$upper_ci, 3)`.
 
 ```{r}
 # Type your code and comments inside the code chunk
@@ -621,9 +639,9 @@ When you are done, make sure all the `|` in the table still line up so your resu
 ::: {.callout-important icon="false" collapse="false" title="Problem 12 Answers"}
 | CI construction method          | lower value | upper value |
 |---------------------------------|-------------|-------------|
-| Using boostrap: 95% rule        | X           | Y           |
-| Using boostrap: percentile rule | A           | B           |
-| Using mathematical formula      | P           | Q           |
+| Using boostrap: 95% rule        | 2.48        | 3.92        |
+| Using boostrap: percentile rule | 2.48        | 3.92        |
+| Using mathematical formula      | 2.436       | 3.844       |
 :::
 
 ::: {.callout-note icon="false" title="Problem 13"}
