@@ -639,8 +639,8 @@ When you are done, make sure all the `|` in the table still line up so your resu
 ::: {.callout-important icon="false" collapse="false" title="Problem 12 Answers"}
 | CI construction method          | lower value | upper value |
 |---------------------------------|-------------|-------------|
-| Using boostrap: 95% rule        | 2.48        | 3.92        |
-| Using boostrap: percentile rule | 2.48        | 3.92        |
+| Using boostrap: 95% rule        | 2.428       | 3.852       |
+| Using boostrap: percentile rule | 2.480       | 3.920       |
 | Using mathematical formula      | 2.436       | 3.844       |
 :::
 
@@ -649,7 +649,7 @@ When you are done, make sure all the `|` in the table still line up so your resu
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 13 Answers"}
-* Delete this and put your text answer here.
+* Yes these three confidence intervals are highly similar since they are nearly identical with a low difference between them.
 :::
 
 # Turning in Your Work
